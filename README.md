@@ -1,7 +1,7 @@
 # Auth service
 Async authentication service with JWT-based access control, refresh token rotation, and multi-factor authentication.
 
-## ## Features
+## Features
 
 - ✅ Registration & email verification  
 - 🛡 JWT authentication (access & refresh tokens)  
@@ -17,6 +17,7 @@ Async authentication service with JWT-based access control, refresh token rotati
 - **Backend:** Python3, FastAPI (async)
 - **Database:** PostgreSQL(asyncpg), SQLAlchemy
 - **Infrastructure:** Docker, Docker Compose
+- **Security:** cryptography, bcrypt
 - **Testing:** pytest (unit, integration, e2e)
 
 ## Installation
@@ -91,7 +92,7 @@ flowchart TB
         UserService
         TokenService
         MFAService
-        ContinuationService
+        ChallengeService
     end
 
     subgraph Infrastructure
@@ -103,13 +104,13 @@ flowchart TB
     AuthService --> UserService
     AuthService --> TokenService
     AuthService --> MFAService
-    AuthService --> ContinuationService
+    AuthService --> ChallengeService
     AuthService --> EmailNotification
 
     UserService --> Repositories
     TokenService --> Repositories
     MFAService --> Repositories
-    ContinuationService --> Repositories
+    ChallengeService --> Repositories
 
     Repositories --> Database
 ```
@@ -217,7 +218,7 @@ sequenceDiagram
 ```
 </details> 
 
-## Config
+## Configuration
 
 ```
 DB_HOST=localhost
@@ -228,6 +229,7 @@ DB_NAME=iam
 DB_CONN_POOL_SIZE=20
 DB_CONN_MAX_OVERFLOW=10
 
+# use it for test/local development only (openssl rand -hex 32)
 SECRET_KEY=7e23e1a55eea04523ec90c86554b5640d2c1f6919e89efa9bb0a56efde5e7cf3
 
 SMTP_TOKEN=0a5e54b0d9f685a652fcae6425af58af
@@ -237,7 +239,7 @@ SMTP_WEB_PORT=8025
 
 REDIS_HOST=localhost
 REDIS_PORT=6379
-
+# use it for test/local development only (openssl rand -base64 32)
 ENCRYPTION_CURRENT_KEY=YADrK143ZO9TGwKAHKWr1QhRsUDqBj4_4_DtiH-QA-w=
 
 LOG_LEVEL=DEBUG
